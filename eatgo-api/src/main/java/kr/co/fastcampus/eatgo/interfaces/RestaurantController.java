@@ -1,8 +1,7 @@
 package kr.co.fastcampus.eatgo.interfaces;
 
-import kr.co.fastcampus.eatgo.domain.Restaurant;
-import kr.co.fastcampus.eatgo.domain.RestaurantRepository;
-import kr.co.fastcampus.eatgo.domain.RestaurantRepositoryImpl;
+import kr.co.fastcampus.eatgo.application.RestaurantService;
+import kr.co.fastcampus.eatgo.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,19 +13,20 @@ import java.util.List;
 public class RestaurantController {
 
     @Autowired
-    private RestaurantRepository repository = new RestaurantRepositoryImpl();
+    private RestaurantService restaurantService;
 
     @GetMapping("/restaurants")
     public List<Restaurant> list(){
-        List<Restaurant> restaurants = repository.findAll();
-
+        List<Restaurant> restaurants = restaurantService.getRestaurants();
         return restaurants;
     }
 
     @GetMapping("/restaurants/{id}")
     public Restaurant detail(@PathVariable("id") Long id){
-        Restaurant restaurant = repository.findByid(id);
-
+        Restaurant restaurant = restaurantService.getRestaurant(id); //기본정보 + 메뉴정보 한번에 받아 오는
+        //Restaurant restaurant = restaurantRepository.findByid(id);
+        //List<MenuItem> menuItems = menuItemRepository.findAllByRestaurantId(id);
+        //restaurant.setMenuItem(menuItems);
         return restaurant;
     }
 }
